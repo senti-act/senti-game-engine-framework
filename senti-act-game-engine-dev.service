@@ -1,0 +1,21 @@
+[Unit]
+# senti-gateway-dev.service
+Description=Senti.Act Game Engine Framework
+Documentation=https://github.com/senti-iot/senti-gateway/blob/master/README.md
+# After=network.target
+
+[Service]
+WorkingDirectory=/srv/nodejs/senti/act/game-engine/development
+ExecStart=/usr/bin/node server.js
+Environment=NODE_PORT=4003
+Environment=NODE_ENV=development
+Type=simple
+Restart=always
+# RestartSec=1
+StartLimitInterval=0
+User=root
+Group=root
+# KillSignal=SIGQUIT
+
+[Install]
+WantedBy=basic.target
