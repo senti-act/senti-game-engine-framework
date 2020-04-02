@@ -5,7 +5,6 @@ dotenv.config();
 if (dotenv.error) {
 	console.warn(dotenv.error)
 }
-
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
@@ -26,6 +25,8 @@ const tipsController=require('./controllers/tips');
 const levelController=require('./controllers/level');
 const competitionController=require('./controllers/competition');
 const achievementController=require('./controllers/achievement');
+const userCompetitionController=require('./controllers/userCompetition');
+const activityController=require('./controllers/activity');
 
 const dbConnection=require('./database/dbConnection');
 
@@ -35,6 +36,8 @@ app.use('/api/tips',tipsController);
 app.use('/api/level',levelController);
 app.use('/api/competition',competitionController);
 app.use('/api/achievement',achievementController);
+app.use('/api/userCompetition',userCompetitionController);
+app.use('/api/activity',activityController);
 
 
 app.get('/',(req, res)=>{

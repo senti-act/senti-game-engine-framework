@@ -13,9 +13,9 @@ class Achievement{
         })
     }
 
-    getAchievementsByUserId(id){
+    getAchievementsByUserId(userId){
         return new Promise((resolve, reject)=>{ 
-            DbConnection.runQuery(`SELECT * FROM UserAchievements where user_id='${id}'`).then((x)=>{
+            DbConnection.runQuery(`SELECT * FROM UserAchievements where user_id='${userId}'`).then((x)=>{
                 resolve(x);
             }).catch(x=>{
                 reject(x);
