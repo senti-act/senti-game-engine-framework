@@ -4,20 +4,31 @@ var competitionRepository = require('../repository/competitionRepository');
 var Repo = new competitionRepository();
 const moment = require('moment');
 
+
 //get all competitions
-router.get('/',(req,res)=>{
-    Repo.getAll().then(x=>{
+router.get('/', (req, res) => {
+    Repo.getAll().then(x => {
         res.status(200).json(x);
-    }).catch(err=>{
+    }).catch(err => {
         res.status(500).json(err);
     })
 })
 
 //get all userCompetitions
-router.get('/userCompetitions',(req,res)=>{
-    Repo.getAllUserCompetition().then(x=>{
+router.get('/userCompetitions', (req, res) => {
+    Repo.getAllUserCompetition().then(x => {
         res.status(200).json(x);
-    }).catch(err=>{
+    }).catch(err => {
+        res.status(500).json(err);
+    })
+})
+
+// post competition
+router.post('/', (req, res) => {
+    var competition = req.body
+    Repo.postCompetition(competition).then(x => {
+        res.status(200).json(x);
+    }).catch(err => {
         res.status(500).json(err);
     })
 })
