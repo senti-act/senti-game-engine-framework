@@ -38,10 +38,12 @@
 		"express-pino-logger": "^4.0.0",
 		"find-config": "^1.0.0",
 		"helmet": "^3.21.2",
-		"moment": "^2.22.2",
+		"moment": "^2.24.0",
 		"mqtt": "^2.18.8",
+		"mysql": "^2.18.1",
 		"pino": "^5.16.0",
-		"senti-apicore": "0.0.17"
+		"senti-apicore": "0.0.17",
+		"uuidv4": "^6.0.7"
 	},
 	"devDependencies": {
 		"eslint": "^6.7.2",
