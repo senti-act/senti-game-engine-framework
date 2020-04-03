@@ -21,8 +21,19 @@ router.get('/users/:id', (req, res) => {
     })
 })
 
+// get xp from achievement by user id
 router.get('/xp/users/:id', (req, res) => {
     Repo.getXpFromAchievementByUserId(req.params.id).then(x => {
+        res.status(200).json(x);
+    }).catch(err => {
+        res.status(500).json(err);
+    })
+})
+
+// post achievement
+router.post('/', (req, res) => {
+    var achievement = req.body;
+    Repo.createAchievement(achievement).then(x => {
         res.status(200).json(x);
     }).catch(err => {
         res.status(500).json(err);
