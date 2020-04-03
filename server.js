@@ -3,13 +3,13 @@ process.title = "senti-act-game-engine-framework"
 const dotenv = require('dotenv')
 dotenv.config();
 if (dotenv.error) {
-	console.warn(dotenv.error)
+    console.warn(dotenv.error)
 }
 const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 var app = express()
-	, server = require('http').createServer(app);
+    , server = require('http').createServer(app);
 const bodyParser = require('body-parser')
 const port = process.env.NODE_PORT || 4000
 
@@ -20,47 +20,49 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 
 //CONTROLLERS
-const userController=require('./controllers/user');
-const tipsController=require('./controllers/tips');
-const levelController=require('./controllers/level');
-const competitionController=require('./controllers/competition');
-const achievementController=require('./controllers/achievement');
-const userCompetitionController=require('./controllers/userCompetition');
-const activityController=require('./controllers/activity');
+const userController = require('./controllers/user');
+const tipsController = require('./controllers/tips');
+const levelController = require('./controllers/level');
+const competitionController = require('./controllers/competition');
+const achievementController = require('./controllers/achievement');
+const userCompetitionController = require('./controllers/userCompetition');
+const activityController = require('./controllers/activity');
+const userAchievementController = require('./controllers/userAchievement');
 
-const dbConnection=require('./database/dbConnection');
+const dbConnection = require('./database/dbConnection');
 
-var DbConnection=new dbConnection();
-app.use('/api/users',userController);
-app.use('/api/tips',tipsController);
-app.use('/api/level',levelController);
-app.use('/api/competition',competitionController);
-app.use('/api/achievement',achievementController);
-app.use('/api/userCompetition',userCompetitionController);
-app.use('/api/activity',activityController);
+var DbConnection = new dbConnection();
+app.use('/api/users', userController);
+app.use('/api/tips', tipsController);
+app.use('/api/level', levelController);
+app.use('/api/competition', competitionController);
+app.use('/api/achievement', achievementController);
+app.use('/api/user/competition', userCompetitionController);
+app.use('/api/activity', activityController);
+app.use('/api/user/achievement', userAchievementController);
 
 
-app.get('/',(req, res)=>{
+app.get('/', (req, res) => {
     res.end('SUCCESS');
 })
 
-app.get('/api',(req,res)=>{
-    var endpoints=listEndpoints(app);
-    var counter=0;
-    var mystring="";
-    endpoints.forEach(x=>{
-        x.methods.forEach(y=>{
+app.get('/api', (req, res) => {
+    var endpoints = listEndpoints(app);
+    var counter = 0;
+    var mystring = "";
+    endpoints.forEach(x => {
+        x.methods.forEach(y => {
             counter++;
-            mystring+=`${y}: ${x.path}\n`
+            mystring += `${y}: ${x.path}\n`
         })
     })
-    var finalString=`API Endpoints ${counter} pcs:\n`;
-    finalString+=mystring;
+    var finalString = `API Endpoints ${counter} pcs:\n`;
+    finalString += mystring;
     res.status(200).send(finalString);
 })
 
-server.listen(port,()=>{
-    DbConnection.createPool().then(x=>{
+server.listen(port, () => {
+    DbConnection.createPool().then(x => {
         console.log('Database connected');
     })
 })
@@ -68,15 +70,15 @@ server.listen(port,()=>{
 //---Start the express server---------------------------------------------------
 
 const startServer = () => {
-	app.listen(port, () => {
-		console.log('Senti Service started on port', port)
-	}).on('error', (err) => {
-		if (err.errno === 'EADDRINUSE') {
-			console.log('Service not started, port ' + port + ' is busy')
-		} else {
-			console.log(err)
-		}
-	})
+    app.listen(port, () => {
+        console.log('Senti Service started on port', port)
+    }).on('error', (err) => {
+        if (err.errno === 'EADDRINUSE') {
+            console.log('Service not started, port ' + port + ' is busy')
+        } else {
+            console.log(err)
+        }
+    })
 }
 
 startServer()

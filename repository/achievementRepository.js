@@ -14,6 +14,17 @@ class Achievement {
         })
     }
 
+    // Get achievement by id
+    getAchievementById(id) {
+        return new Promise((resolve, reject) => {
+            DbConnection.runQuery(`SELECT * FROM Achievement WHERE id ='${id}'`).then((x) => {
+                resolve(x);
+            }).catch(x => {
+                reject(x);
+            })
+        })
+    }
+
     // Get achievement by user_id
     getAchievementsByUserId(userId) {
         return new Promise((resolve, reject) => {

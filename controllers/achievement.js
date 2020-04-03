@@ -12,6 +12,14 @@ router.get('/', (req, res) => {
     })
 })
 
+router.get('/:id', (req, res) => {
+    Repo.getAchievementById(req.params.id).then(x => {
+        res.status(200).json(x);
+    }).catch(err => {
+        res.status(500).json(err);
+    })
+})
+
 //get achievements by userId
 router.get('/users/:id', (req, res) => {
     Repo.getAchievementsByUserId(req.params.id).then(x => {
