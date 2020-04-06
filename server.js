@@ -82,3 +82,23 @@ const startServer = () => {
 }
 
 startServer()
+
+
+// --> LOGIN FLOW
+// 1: login from the app by the given endpoint
+// 2a: save the user to our databse if he is missing data or doesnt exist
+// 2b: just throw him to the app if exists
+// 3: save the token to asyncstorage and call all of our endpoints with the bearer: token
+
+// --> REGISTER FLOW
+// 1: register from the by the given endpoint
+// 2: save the user to our database and
+// 3: authenticate in to the app
+
+// --> how do we verify the token ?? token --> contains uuid ? do we wanna get it on the fly or save it to db 
+// 1: create verifyToken middleware
+// 2: insert it to our endpoitns where we need verification
+// 3: if else if token doesnt match 
+
+//plan A : get uuid from token when request --> optimal
+//plan B : get uuid from users device on each request when needed --> lame version
