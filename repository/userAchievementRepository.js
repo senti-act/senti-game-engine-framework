@@ -5,7 +5,9 @@ class UserAchievement {
 
     getByUserId(id) {
         return new Promise((resolve, reject) => {
-            DbConnection.runQuery(`SELECT * FROM UserAchievements WHERE user_id='${id}'`).then((x) => {
+            DbConnection.runQuery(`SELECT * FROM UserAchievements
+            INNER JOIN Achievement A on UserAchievements.achievement_id = A.id
+            WHERE user_id='${id}'`).then((x) => {
                 resolve(x);
             }).catch(x => {
                 reject(x);
