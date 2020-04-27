@@ -23,6 +23,15 @@ router.get('/:id', (req, res) => {
     })
 })
 
+//get user by uuid
+router.get('/uuid/:uuid', (req, res) => {
+    Repo.getByUuid(req.params.uuid).then(x => {
+        res.status(200).json(x);
+    }).catch(err => {
+        res.status(500).json(err);
+    })
+})
+
 //update user
 router.put('/:id', (req, res) => {
     Repo.updateUser(req.params.id, req.body).then(x => {
