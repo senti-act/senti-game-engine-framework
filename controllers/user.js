@@ -63,6 +63,14 @@ router.get('/usageByDay/:startDate/:endDate', (req, res) => {
     var actualToken=tokenSegments[1];
      
     getUsageByDay(req.params.startDate,req.params.endDate,actualToken).then(x=>{
+        var sum = 0;
+        x.forEach(item => {
+            sum += item.averageFlowPerDay
+        });
+        x.sumOfAvgM3 = (sum).toFixed(2);
+        x.sumOfAvgMl = (sum * 100).toFixed(2);
+        x.sumOfAvgL = (sum * 1000).toFixed(2);
+        console.log(x)
         res.status(200).json(x);
     }).catch(x=>{
         res.status(500).json(x);
