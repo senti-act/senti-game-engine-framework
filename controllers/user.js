@@ -57,19 +57,12 @@ router.post('/', (req, res) => {
 })
 
 //get user by uuid
-router.get('/usageByDay/:startDate/:endDate', (req, res) => {
+router.get('/usageByDay/:startDate/:endDate',(req, res) => {
     var token=req.header('Authorization');
     var tokenSegments=token.split(' ');
     var actualToken=tokenSegments[1];
      
     getUsageByDay(req.params.startDate,req.params.endDate,actualToken).then(x=>{
-        var sum = 0;
-        x.forEach(item => {
-            sum += item.averageFlowPerDay
-        });
-        x.sumOfAvgM3 = (sum).toFixed(2);
-        x.sumOfAvgMl = (sum * 100).toFixed(2);
-        x.sumOfAvgL = (sum * 1000).toFixed(2);
         console.log(x)
         res.status(200).json(x);
     }).catch(x=>{
@@ -82,7 +75,15 @@ function getUsageByDay(startDate,endDate,token) {
     return new Promise((resolve, reject) => {
         const requestUri = `https://dev.services.senti.cloud/databroker/v2/waterworks/data/usagebyday/${startDate}/${endDate}`;
         axios.get(requestUri, {headers :{ 'Authorization': 'Bearer ' + token}}).then(x => {
-            resolve(x.data);
+            var data = x.data;
+            var sum = 0;
+            data.forEach(item => {
+                sum += item.averageFlowPerDay
+            });
+            data.sumOfAvgM3 = (sum).toFixed(2);
+            data.sumOfAvgMl = (sum * 100).toFixed(2);
+            data.sumOfAvgL = (sum * 1000).toFixed(2);
+            resolve(data);
         }).catch(error => {
             reject(error);
         });         
