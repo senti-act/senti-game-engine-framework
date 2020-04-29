@@ -80,9 +80,16 @@ function getUsageByDay(startDate,endDate,token) {
             data.forEach(item => {
                 sum += item.averageFlowPerDay
             });
-            data.sumOfAvgM3 = (sum).toFixed(2);
-            data.sumOfAvgMl = (sum * 100).toFixed(2);
-            data.sumOfAvgL = (sum * 1000).toFixed(2);
+            data.push("sum",{
+                sumOfAvgM3:(sum).toFixed(2),
+                sumOfAvgMl:(sum * 100).toFixed(2),
+                sumOfAvgL:(sum * 1000).toFixed(2)
+            })
+            // data.push({sumOfAvgMl:(sum * 100).toFixed(2)})
+            // data.push({sumOfAvgL:(sum * 1000).toFixed(2)})
+            // data.sumOfAvgM3 = (sum).toFixed(2);
+            // data.sumOfAvgMl = (sum * 100).toFixed(2);
+            // data.sumOfAvgL = (sum * 1000).toFixed(2);
             resolve(data);
         }).catch(error => {
             reject(error);
