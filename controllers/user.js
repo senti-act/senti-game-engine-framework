@@ -90,9 +90,9 @@ function getUsageByDay(startDate,endDate,token) {
                 // console.log(item)
             });
             data.push([{
-                sumOfAvgM3:(sum).toFixed(2),
-                sumOfAvgMl:(sum * 100).toFixed(2),
-                sumOfAvgL:(sum * 1000).toFixed(2)
+                sumOfAvgM3:(sum).toFixed(0),
+                sumOfAvgMl:(sum * 100).toFixed(0),
+                sumOfAvgL:(sum * 1000).toFixed(0)
             }])
             // data.push({sumOfAvgMl:(sum * 100).toFixed(2)})
             // data.push({sumOfAvgL:(sum * 1000).toFixed(2)})
