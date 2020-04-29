@@ -63,7 +63,7 @@ router.get('/usageByDay/:startDate/:endDate',(req, res) => {
     var actualToken=tokenSegments[1];
      
     getUsageByDay(req.params.startDate,req.params.endDate,actualToken).then(x=>{
-        console.log(x)
+        // console.log(x)
         res.status(200).json(x);
     }).catch(x=>{
         res.status(500).json(x);
@@ -75,21 +75,32 @@ function getUsageByDay(startDate,endDate,token) {
     return new Promise((resolve, reject) => {
         const requestUri = `https://dev.services.senti.cloud/databroker/v2/waterworks/data/usagebyday/${startDate}/${endDate}`;
         axios.get(requestUri, {headers :{ 'Authorization': 'Bearer ' + token}}).then(x => {
-            var data = x.data;
+            var data = [];
+            data.push([...x.data])
             var sum = 0;
-            data.forEach(item => {
+
+            // Object.keys(data).forEach(item => {
+            //     sum += data[item].averageFlowPerDay
+            //     console.log(data[item])
+            // });
+            
+            data[0].forEach(item => {
                 sum += item.averageFlowPerDay
+
+                // console.log(item)
             });
-            data.push("sum",{
+            data.push([{
                 sumOfAvgM3:(sum).toFixed(2),
                 sumOfAvgMl:(sum * 100).toFixed(2),
                 sumOfAvgL:(sum * 1000).toFixed(2)
-            })
+            }])
             // data.push({sumOfAvgMl:(sum * 100).toFixed(2)})
             // data.push({sumOfAvgL:(sum * 1000).toFixed(2)})
             // data.sumOfAvgM3 = (sum).toFixed(2);
             // data.sumOfAvgMl = (sum * 100).toFixed(2);
             // data.sumOfAvgL = (sum * 1000).toFixed(2);
+            // console.log(data)
+
             resolve(data);
         }).catch(error => {
             reject(error);
