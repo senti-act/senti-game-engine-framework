@@ -85,6 +85,9 @@ function getUsageByDay(startDate,endDate,token) {
             // });
             
             data[0].forEach(item => {
+                item.sumOfAvgM3 = (item.averageFlowPerDay).toFixed(0),
+                item.sumOfAvgMl = (item.averageFlowPerDay * 100).toFixed(0),
+                item.sumOfAvgL= (item.averageFlowPerDay * 1000).toFixed(0)
                 sum += item.averageFlowPerDay
 
                 // console.log(item)
