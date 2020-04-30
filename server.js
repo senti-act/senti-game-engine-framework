@@ -14,9 +14,12 @@ const bodyParser = require('body-parser')
 const port = process.env.NODE_PORT || 4000
 
 app.use(helmet())
-app.use(bodyParser.json())
+// app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '50mb'}));
+// app.use(bodyParser.urlencoded({limit: '50mb'}));
+
 // app.use(bodyParser.text())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true,limit: '50mb' }))
 app.use(cors())
 
 //CONTROLLERS

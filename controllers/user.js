@@ -71,6 +71,32 @@ router.get('/usageByDay/:startDate/:endDate',(req, res) => {
    
 })
 
+//point calculation
+//->  usage of my user in a day -> todays data token ???? 
+//-> avrage of all users in a day -> constant
+//-> constant national baseline -> for a day 100liters per day
+
+//generate points in the monthly competition every day
+function getPointToday(){
+    //getting all the users 
+    var avgAllToday = 0;
+    var users = getAllUsers();
+    if (users != null) {
+
+    }
+}
+
+
+function getAllUsers(){
+    return new Promise((resolve, reject) =>{
+        Repo.getAll().then(users => {
+            resolve(users)
+        }).catch(err => {
+            reject(null)
+        })
+    })
+}
+
 function getUsageByDay(startDate,endDate,token) {
     return new Promise((resolve, reject) => {
         const requestUri = `https://dev.services.senti.cloud/databroker/v2/waterworks/data/usagebyday/${startDate}/${endDate}`;
@@ -79,11 +105,6 @@ function getUsageByDay(startDate,endDate,token) {
             data.push([...x.data])
             var sum = 0;
 
-            // Object.keys(data).forEach(item => {
-            //     sum += data[item].averageFlowPerDay
-            //     console.log(data[item])
-            // });
-            
             data[0].forEach(item => {
                 item.sumOfAvgM3 = (item.averageFlowPerDay).toFixed(0),
                 item.sumOfAvgMl = (item.averageFlowPerDay * 100).toFixed(0),
@@ -97,13 +118,7 @@ function getUsageByDay(startDate,endDate,token) {
                 sumOfAvgMl:(sum * 100).toFixed(0),
                 sumOfAvgL:(sum * 1000).toFixed(0)
             }])
-            // data.push({sumOfAvgMl:(sum * 100).toFixed(2)})
-            // data.push({sumOfAvgL:(sum * 1000).toFixed(2)})
-            // data.sumOfAvgM3 = (sum).toFixed(2);
-            // data.sumOfAvgMl = (sum * 100).toFixed(2);
-            // data.sumOfAvgL = (sum * 1000).toFixed(2);
-            // console.log(data)
-
+     
             resolve(data);
         }).catch(error => {
             reject(error);
