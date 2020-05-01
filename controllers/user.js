@@ -36,8 +36,10 @@ router.get('/uuid/:uuid', (req, res) => {
 //update user
 router.put('/:id', (req, res) => {
     Repo.updateUser(req.params.id, req.body).then(x => {
+        console.log(x)
         res.status(200).json(x);
     }).catch(err => {
+        console.log(err)
         res.status(500).json(err);
     })
 })
@@ -77,14 +79,14 @@ router.get('/usageByDay/:startDate/:endDate',(req, res) => {
 //-> constant national baseline -> for a day 100liters per day
 
 //generate points in the monthly competition every day
-function getPointToday(){
-    //getting all the users 
-    var avgAllToday = 0;
-    var users = getAllUsers();
-    if (users != null) {
+// function getPointToday(){
+//     //getting all the users 
+//     var avgAllToday = 0;
+//     var users = getAllUsers();
+//     if (users != null) {
 
-    }
-}
+//     }
+// }
 
 
 function getAllUsers(){
