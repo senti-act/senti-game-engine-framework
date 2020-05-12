@@ -73,6 +73,36 @@ router.get('/usageByDay/:startDate/:endDate',(req, res) => {
    
 })
 
+router.get('/weeklyPrice/:orgId', async (req, res) =>{
+    var token=req.header('Authorization');
+    var tokenSegments=token.split(' ');
+    var actualToken=tokenSegments[1];
+
+    //we compare current week to last week and check the difference of usage
+    //later we multiply the differnece with the water price
+    var start = moment().subtract(7,'days').format('YYYY-MM-DD')
+    var end = moment().add(2,'days').format('YYYY-MM-DD')
+    var week_start = moment().subtract(14,'days').format('YYYY-MM-DD')
+    var week_end = moment().subtract(5,'days').format('YYYY-MM-DD')
+    savedMoney(req.params.orgId).then(async x=>{
+        var usage_week_one = await getUsageByDay(start,end,actualToken);
+        var usage_week_two = await getUsageByDay(week_start,week_end,actualToken);
+        var sum_week_one = usage_week_one[0][1].sumOfAvgL;
+        var sum_week_two = usage_week_two[0][1].sumOfAvgL;
+        var difference = sum_week_two-sum_week_one
+
+        var waterPrice = x.waterTotal / 100
+        var wasteWater = x.sewageTotal / 100
+        var waterSaved = (difference * waterPrice).toFixed(0)
+        var sewageSaved = (difference * wasteWater).toFixed(0)
+        var total = (difference * x.total/100).toFixed(0)
+        
+        res.status(200).json({waterSaved, sewageSaved, total})    
+    }).catch(err=>{
+        res.status(500).json(err)
+    })
+})
+
 //point calculation
 //->  usage of my user in a day -> todays data token ???? 
 //-> avrage of all users in a day -> constant
@@ -88,6 +118,15 @@ router.get('/usageByDay/:startDate/:endDate',(req, res) => {
 //     }
 // }
 
+function savedMoney(orgId){
+    return new Promise((resolve, reject) => {
+    const requestUri = `https://waterworks.senti.cloud/settings/price/${orgId}`;
+        axios.get(requestUri).then(x => {
+            resolve(x.data)
+        }).catch(err=>{
+            reject(err)
+     })
+})}
 
 function getAllUsers(){
     return new Promise((resolve, reject) =>{
@@ -108,16 +147,16 @@ function getUsageByDay(startDate,endDate,token) {
             var sum = 0;
 
             data[0].forEach(item => {
-                item.sumOfAvgM3 = (item.averageFlowPerDay).toFixed(0),
-                item.sumOfAvgMl = (item.averageFlowPerDay * 100).toFixed(0),
+                item.sumOfAvgM3 = (item.averageFlowPerDay),
+                item.sumOfAvgMl = (item.averageFlowPerDay * 100),
                 item.sumOfAvgL= (item.averageFlowPerDay * 1000).toFixed(0)
                 sum += item.averageFlowPerDay
 
                 // console.log(item)
             });
             data.push([{
-                sumOfAvgM3:(sum).toFixed(0),
-                sumOfAvgMl:(sum * 100).toFixed(0),
+                sumOfAvgM3:(sum),
+                sumOfAvgMl:(sum * 100),
                 sumOfAvgL:(sum * 1000).toFixed(0)
             }])
      
