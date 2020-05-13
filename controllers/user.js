@@ -104,19 +104,66 @@ router.get('/weeklyPrice/:orgId', async (req, res) =>{
 })
 
 //point calculation
-//->  usage of my user in a day -> todays data token ???? 
-//-> avrage of all users in a day -> constant
-//-> constant national baseline -> for a day 100liters per day
+router.get('/points/:userId', async (req, res) =>{
+    var token=req.header('Authorization');
+    var tokenSegments=token.split(' ');
+    var actualToken=tokenSegments[1];
 
-//generate points in the monthly competition every day
-// function getPointToday(){
-//     //getting all the users 
-//     var avgAllToday = 0;
-//     var users = getAllUsers();
-//     if (users != null) {
+    var currentDaysMinus = moment(currentDay).subtract(2,'day').format('YYYY-MM-DD');
+    var currentDay = moment().format('YYYY-MM-DD');
+    var currentDayPlus = moment(currentDay).add(1,'day').format('YYYY-MM-DD');
 
-//     }
-// }
+    var points=100;
+
+    try{
+        var national = await getNationalBaseline()
+        var usageData = await getUsageByDay(currentDaysMinus,currentDayPlus,actualToken)
+        var numberOfPeople = await getChildren(actualToken);
+    }catch(err){
+        res.status(500).json(err)
+    }
+    
+    var curr= usageData[0][1].sumOfAvgL
+    var prev = usageData[0][0].sumOfAvgL
+    var red = ((prev - curr)/prev*100)
+    var benchmark = national.benchmark * numberOfPeople;
+    var goal = national.goal * numberOfPeople;
+    
+    //we get daily reduced consumption (if more than 0 we add points + reduced cons., if minus we minus reduced consumption)
+    if(red>0){
+        points = points + 100 + red
+    } else {
+        points = points - red
+    }
+    //compare if our consumption is less then baseline (if yes bonus x points)
+    if(curr<benchmark){
+        points = points + 200
+    }
+    else{
+        points = points - 50
+    }
+    //compare if our consumption is less then goal (if yes bonus x points)
+    if(curr<goal){
+        points = points + 200
+    }
+    res.status(200).json(points.toFixed(0))
+
+})
+
+
+function getChildren(token){
+    return new Promise((resolve, reject) => {
+    const requestUri = `https://dev.services.senti.cloud/core/v2/auth/user`;
+    axios.get(requestUri, {headers :{ 'Authorization': 'Bearer ' + token}}).then(x => {
+        var data = x.data
+            var numOfA = data.aux.sentiWaterworks.extendedProfile.noOfAdults
+            var numOfC = data.aux.sentiWaterworks.extendedProfile.noOfChildren
+            var rs = numOfA + numOfC
+            resolve(rs)
+        }).catch(err=>{
+            reject(err)
+     })
+})}
 
 function savedMoney(orgId){
     return new Promise((resolve, reject) => {
@@ -127,6 +174,17 @@ function savedMoney(orgId){
             reject(err)
      })
 })}
+
+function getNationalBaseline(){
+    return new Promise((resolve, reject) => {
+        const requestUri = `https://waterworks.senti.cloud/settings/globals/DK`;
+            axios.get(requestUri).then(x => {
+                resolve(x.data)
+            }).catch(err=>{
+                reject(err)
+         })
+    })
+}
 
 function getAllUsers(){
     return new Promise((resolve, reject) =>{

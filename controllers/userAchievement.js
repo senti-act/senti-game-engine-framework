@@ -16,6 +16,15 @@ router.get('/:id', (req, res) => {
     })
 })
 
+// //get by userID and achievementID
+// router.get('/:id', (req, res) => {
+//     Repo.getByUserId(req.params.id).then(x => {
+//         res.status(200).json(x);
+//     }).catch(err => {
+//         res.status(500).json(err);
+//     })
+// })
+
 //post user achievement
 // when we post it we update user's xp
 router.post('/', (req, res) => {

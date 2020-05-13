@@ -26,13 +26,22 @@ class Activity{
 
     getActivitiesByUserId(userId){
         return new Promise((resolve, reject)=>{
-            DbConnection.runQuery(`SELECT * FROM Activity where user_id='${userId}'`).then((x)=>{
+            DbConnection.runQuery(`SELECT * FROM Activity where user_id='${userId}' order by date DESC limit 1`).then((x)=>{
                 resolve(x);
             }).catch(x=>{
                 reject(x)
             })
         })
     }
-}
+
+    create(activity){
+        return new Promise((resolve, reject)=>{
+            DbConnection.runQueryWithBody("INSERT INTO Activity SET ?",activity).then((x)=>{
+                resolve(x);
+            }).catch(x=>{
+                reject(x);
+            })
+        })
+    }}
 
 module.exports=Activity
