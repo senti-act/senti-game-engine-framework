@@ -146,9 +146,38 @@ router.get('/points/:userId', async (req, res) =>{
     if(curr<goal){
         points = points + 200
     }
+
+    Repo.getById(req.params.userId).then(x => {
+        var user = x
+        user[0].xp = user[0].xp + points
+        Repo.updateUser(req.params.userId, user)
+        res.status(200).json(true);
+    }).catch(err => {console.log(err)})
+
     res.status(200).json(points.toFixed(0))
 
 })
+
+
+router.get('/benchmark/:userId', async (req, res) =>{
+    var token=req.header('Authorization');
+    var tokenSegments=token.split(' ');
+    var actualToken=tokenSegments[1];
+
+    try{
+        var national = await getNationalBaseline()
+        var numberOfPeople = await getChildren(actualToken);
+    }catch(err){
+        res.status(500).json(err)
+    }
+    
+    var benchmark = national.benchmark * numberOfPeople * 7;
+    var goal = national.goal * numberOfPeople * 7;
+    
+    res.status(200).json({benchmark:benchmark, goal:goal})
+})
+
+
 
 
 function getChildren(token){
