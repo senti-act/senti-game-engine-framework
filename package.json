@@ -4,7 +4,10 @@
 	"deprecated": false,
 	"description": "Senti.Act Game Engine Framework service",
 	"main": "server.js",
-	"scripts": {},
+	"scripts": {
+		"test": "jest",
+		"test:watch": "jest --watch"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/senti-iot/senti-gateway.git"
@@ -48,6 +51,8 @@
 	},
 	"devDependencies": {
 		"eslint": "^6.7.2",
-		"eslint-config-google": "^0.14.0"
+		"eslint-config-google": "^0.14.0",
+		"jest": "^26.0.1",
+		"supertest": "^4.0.2"
 	}
 }
