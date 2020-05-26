@@ -1,21 +1,29 @@
-const request = require("supertest");
-const { app, server } = require("../server");
-
+const app = require("../server.js");
+const supertest = require('supertest')
+const request = supertest(app)
+const dbConnection = require('../database/dbConnection');
+var DbConnection = new dbConnection();
 
 
 describe("Test the root path", () => {
-    // afterEach(() => {
-    //     server.close();
-    //   });
-
-    test("It should response the GET method", () => {
-        request(app)
-        .get('/')
-        .set('Accept', 'application/json')
-        .expect(200)
-    });
+  beforeAll(() => {
+    DbConnection.createPool().then(x => {
+      console.log('Database connected');
+    })
   });
-
+  afterAll(() => {
+    DbConnection.closeConnection().then(x=>{
+      console.log('Database closed');
+    }).catch(x=>{
+      console.log("Error occured while closing database connection")
+    })
+  });
+  it("Should respond 200 OK the GET method", async done => {
+      const res = await request.get('/api/users');
+      expect(res.status).toBe(200);
+      done();
+  });
+});
 // it('Get all the achievements', async done => {
 //     const res = await request.get('/')
 //     expect(res.status).toBe(200)

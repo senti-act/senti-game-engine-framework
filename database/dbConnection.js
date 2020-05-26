@@ -2,6 +2,18 @@ var mysql = require('mysql');
 var connectionPool;
 
 class DbConnection{
+    closeConnection(){
+        return new Promise((resolve, reject) => {
+            try{
+                connectionPool.end();
+                resolve();
+            }
+            catch(err){
+                console.log('ERR',err)
+                reject(err);
+            }
+        })
+    }
     createPool(){
         return new Promise((resolve, reject) => {
             try{

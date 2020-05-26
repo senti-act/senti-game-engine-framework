@@ -11,7 +11,6 @@ const helmet = require('helmet')
 var app = express()
     , server = require('http').createServer(app);
 const bodyParser = require('body-parser')
-const port = process.env.NODE_PORT || 4000
 
 app.use(helmet())
 // app.use(bodyParser.json())
@@ -32,9 +31,9 @@ const userCompetitionController = require('./controllers/userCompetition');
 const activityController = require('./controllers/activity');
 const userAchievementController = require('./controllers/userAchievement');
 
-const dbConnection = require('./database/dbConnection');
+// const dbConnection = require('./database/dbConnection');
 
-var DbConnection = new dbConnection();
+// var DbConnection = new dbConnection();
 app.use('/api/users', userController);
 app.use('/api/tips', tipsController);
 app.use('/api/level', levelController);
@@ -64,27 +63,31 @@ app.get('/api', (req, res) => {
     res.status(200).send(finalString);
 })
 
-server.listen(port, () => {
-    DbConnection.createPool().then(x => {
-        console.log('Database connected');
-    })
-})
+module.exports=app;
+// server.listen(port, () => {
+    // DbConnection.createPool().then(x => {
+    //     //             console.log('Database connected');
+    //     //         })
+// })
 
 //---Start the express server---------------------------------------------------
 
-const startServer = () => {
-    app.listen(port, () => {
-        console.log('Senti Service started on port', port)
-    }).on('error', (err) => {
-        if (err.errno === 'EADDRINUSE') {
-            console.log('Service not started, port ' + port + ' is busy')
-        } else {
-            console.log(err)
-        }
-    })
-}
+// const startServer = () => {
+//     server.listen(port, () => {
+//         console.log('Senti Service started on port', port)
+//         DbConnection.createPool().then(x => {
+//             console.log('Database connected');
+//         })
+//     }).on('error', (err) => {
+//         if (err.errno === 'EADDRINUSE') {
+//             console.log('Service not started, port ' + port + ' is busy')
+//         } else {
+//             console.log(err)
+//         }
+//     })
+// }
 
-startServer()
+// startServer()
 
 
 // --> LOGIN FLOW
