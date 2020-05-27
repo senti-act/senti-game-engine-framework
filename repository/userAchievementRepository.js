@@ -36,6 +36,15 @@ class UserAchievement {
             })
         })
     }
+    delete(id) {
+        return new Promise((resolve, reject) => {
+            DbConnection.runQueryWithBody(`Delete From UserAchievements where user_id = '${id}'`).then((x) => {
+                resolve(x);
+            }).catch(x => {
+                reject(x);
+            })
+        })
+    }
 }
 
 module.exports = UserAchievement

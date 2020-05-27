@@ -34,12 +34,24 @@ router.post('/', (req, res) => {
             UserRepo.getById(obj.user_id).then(x => {
                 var user = x
                 user[0].xp = user[0].xp + y[0].xp
-                UserRepo.updateUser(obj.user_id, user)
+                UserRepo.updateUser(obj.user_id, user).then(x=>{
+                    // console.log(x)
+                    res.status(200).json(x);
+                }).catch(err=>{
+                    console.log(err)
+                })
             }).catch(err => {
                 console.log(err)
             })
         }).catch(err =>
             console.log(err))
+    }).catch(err => {
+        res.status(500).json(err);
+    })
+})
+
+router.delete('/:id', (req, res) => {
+    Repo.delete(req.params.id).then(x => {
         res.status(200).json(x);
     }).catch(err => {
         res.status(500).json(err);

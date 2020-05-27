@@ -52,6 +52,15 @@ router.post('/', (req, res) => {
     user.createdAt = date
 
     Repo.create(user).then(x => {
+        res.status(200).json({id:user.id});
+    }).catch(err => {
+        res.status(500).json(err);
+    })
+})
+
+//delete user by id
+router.delete('/:id', (req, res) => {
+    Repo.delete(req.params.id).then(x => {
         res.status(200).json(x);
     }).catch(err => {
         res.status(500).json(err);
@@ -178,7 +187,31 @@ router.get('/benchmark/:userId', async (req, res) =>{
 })
 
 
+router.post('/auth', async (req, res) =>{
+    var orgNickname = req.body.orgNickname
+    var username = req.body.username
+    var password = req.body.password
+    auth(orgNickname,username,password).then(x=>{
+        res.status(200).json(x);
+    }).catch(err =>{
+        res.status(500).json(err);
+    })
+})
 
+function auth(orgNickname,username,password){
+    return new Promise((resolve, reject) => {
+    const requestUri = `https://dev.services.senti.cloud/core/v2/auth/organisation`;
+    axios.post(requestUri, {
+        orgNickname:orgNickname,
+        username:username,
+        password:password
+     })
+    .then((x) => {
+        resolve(x)
+    }, (err) => {
+        reject(err)
+    });
+})}
 
 function getChildren(token){
     return new Promise((resolve, reject) => {

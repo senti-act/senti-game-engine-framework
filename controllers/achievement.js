@@ -48,5 +48,13 @@ router.post('/', (req, res) => {
     })
 })
 
+router.delete('/:id', (req, res) => {
+    Repo.delete(req.params.id).then(x => {
+        res.status(200).json(x);
+    }).catch(err => {
+        res.status(500).json(err);
+    })
+})
+
 
 module.exports = router;

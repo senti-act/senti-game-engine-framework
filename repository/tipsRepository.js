@@ -15,6 +15,16 @@ class Tips{
         })
     }
 
+    getTipByUser(id){
+        return new Promise((resolve, reject)=>{
+            DbConnection.runQuery(`SELECT * from Tips where user_id = "${id}" and approved = 1`).then((x)=>{
+                resolve(x);
+            }).catch(x=>{
+                reject(x);
+            })
+        })
+    }
+
     getByCategoryId(id){
         return new Promise((resolve, reject)=>{
             DbConnection.runQuery(`SELECT * from Tips where category_id = ${id} and approved = 1`).then((x)=>{
@@ -38,6 +48,16 @@ class Tips{
     postTip(tip){
         return new Promise((resolve, reject)=>{
             DbConnection.runQueryWithBody("INSERT INTO Tips SET ?",tip).then((x)=>{
+                resolve(x);
+            }).catch(x=>{
+                reject(x);
+            })
+        })
+    }
+
+    deleteTip(id){
+        return new Promise((resolve, reject)=>{
+            DbConnection.runQueryWithBody(`DELETE FROM Tips where id='${id}'`).then((x)=>{
                 resolve(x);
             }).catch(x=>{
                 reject(x);

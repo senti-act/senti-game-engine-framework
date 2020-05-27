@@ -57,8 +57,17 @@ class Achievement {
     createAchievement(achievement) {
         return new Promise((resolve, reject) => {
             DbConnection.runQueryWithBody("INSERT INTO Achievement SET ?", achievement).then((x) => {
-                resolve(x);
+                resolve(x.insertId);
             }).catch(x => {
+                reject(x);
+            })
+        })
+    }
+    delete(id){
+        return new Promise((resolve, reject)=>{
+            DbConnection.runQueryWithBody(`Delete from Achievement where id='${id}'`).then((x)=>{
+                resolve(x);
+            }).catch(x=>{
                 reject(x);
             })
         })

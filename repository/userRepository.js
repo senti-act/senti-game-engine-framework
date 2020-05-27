@@ -52,6 +52,16 @@ class User{
             })
         })
     }
+
+    delete(id){
+        return new Promise((resolve, reject)=>{
+            DbConnection.runQueryWithBody(`Delete from User where id='${id}'`).then((x)=>{
+                resolve(x);
+            }).catch(x=>{
+                reject(x);
+            })
+        })
+    }
 }
 
 module.exports=User

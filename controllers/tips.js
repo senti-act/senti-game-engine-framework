@@ -18,6 +18,16 @@ router.get('/',(req,res)=>{
     })
 })
 
+//get tips by user
+router.get('/user/:id',(req,res)=>{
+    var id = req.params.id
+    Repo.getTipByUser(id).then(tips=>{
+        res.status(200).json(tips);
+    }).catch(err=>{
+        res.status(500).json(err);
+    })
+})
+
 //get all categories
 router.get('/categories',(req,res)=>{
     Repo.getAllCategories().then(x=>{
@@ -59,5 +69,16 @@ router.post('/', (req, res) => {
         }
     })
 })
+
+//delete tip by id 
+router.delete('/:id', (req, res) => {
+    var id = req.params.id;
+    Repo.deleteTip(id).then(x => {
+        res.status(200).json(x);
+    }).catch(err => {
+        res.status(500).json(err);
+    })
+})
+
 
 module.exports = router;
