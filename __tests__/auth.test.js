@@ -29,6 +29,7 @@ describe("authentication", () => {
 
 		done()
 	})
+
 	// it("Get weekly consumption", async done =>{
 	//     var today =moment().format("YYYY-MM-DD");
 	//     var last_week = moment().subtract(7,'days');
