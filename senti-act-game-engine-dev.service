@@ -6,7 +6,8 @@ Documentation=https://github.com/senti-iot/senti-gateway/blob/master/README.md
 
 [Service]
 WorkingDirectory=/srv/nodejs/senti/act/game-engine/development
-ExecStart=/usr/bin/node server.js
+# ExecStart=/usr/bin/node server.js
+ExecStart=/usr/bin/node app.js
 Environment=NODE_PORT=4003
 Environment=NODE_ENV=development
 Type=simple

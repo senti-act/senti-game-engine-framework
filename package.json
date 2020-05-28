@@ -12,8 +12,8 @@
 		"type": "git",
 		"url": "git+https://github.com/senti-iot/senti-gateway.git"
 	},
-	"jest":{
-		"testEnvironment":"node"
+	"jest": {
+		"testEnvironment": "node"
 	},
 	"keywords": [
 		"Senti.Cloud",
