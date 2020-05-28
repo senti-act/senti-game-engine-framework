@@ -30,7 +30,7 @@ router.get('/:id', (req, res) => {
         }
         ).catch(err => {
             console.log(err)
-            res.status(500).json({ level: 'dupa' });
+            res.status(500).json(err);
         })
     }).catch(err => {
         res.status(500).json(err);
